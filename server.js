@@ -24,9 +24,28 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
-
+app.get("/api/timestamp/:date_string?",(req, res)=>{//? is to specify the end of the string
+  let date = new Date(req.params.date_string)
+  
+  if(date){
+      if(date.toString() === "Invalid Date") {
+      res.json({ error: "Invaid Date" });
+      }else{
+      const unixTimeStamp = date.getTime(); 
+      const utcTimeStamp = date.toUTCString();
+      res.json({"unix":unixTimeStamp, "utc": utcTimeStamp})
+      }
+   }
+  else{
+    let date = new Date().toString()
+    const unixTimeStamp = new Date(date).getTime(); 
+    const utcTimeStamp = new Date(date).toUTCString();
+    res.json({"unix":unixTimeStamp, "utc": utcTimeStamp})
+  }
+})
 
 // listen for requests :)
 var listener = app.listen(process.env.PORT, function () {
   console.log('Your app is listening on port ' + listener.address().port);
 });
+//{"unix":1451001600000,"utc":"Fri, 25 Dec 2015 00:00:00 GMT"}
