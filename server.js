@@ -30,12 +30,18 @@ app.get("/api/timestamp/", (req, res)=>{
 })
 
 app.get("/api/timestamp/:date_string?",(req, res)=>{//? is to specify the end of the string
-  let date = new Date(req.params.date_string)
-      if(date.toString() !== "Invalid Date") {
-        res.json({"unix":date.getTime(), "utc": date.toUTCString()})
-      }else{
-        res.json({ error: "Invaid Date" });
-      }
+  let date = req.params.date_string
+  let dateObj = new Date(date)
+  if("/d{5,}".test(date)){
+    let dateInt = parseInt(date)
+    res.json({ unix: date, utc: new Date(dateInt).toUTCString() });
+  }
+  
+  if(date.toString() !== "Invalid Date") {
+    res.json({"unix":date.getTime(), "utc": date.toUTCString()})
+  }else{
+    res.json({ error: "Invaid Date" });
+  }
 })
 
 // listen for requests :)
